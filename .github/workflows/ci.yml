@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: docker-compose -f .devcontainer/docker-compose.yml up -d
-    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app su node -c "cd /workspace; npm ci"
-    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app su node -c "cd /workspace; npm run build"
-    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app su node -c "cd /workspace; npm run test:cov"
-    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app su node -c "cd /workspace; npm run test:e2e"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm ci"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm run build"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm run test:cov"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm run test:e2e"
     - run: docker-compose -f .devcontainer/docker-compose.yml down
