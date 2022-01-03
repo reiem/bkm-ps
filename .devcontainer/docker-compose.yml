@@ -17,27 +17,31 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
 
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
-
     # Uncomment the next line to use a non-root user for all processes.
     # user: node
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
-  db:
+  db_dev:
     image: postgres:latest
     restart: unless-stopped
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/dev/data
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: bkmps
+      POSTGRES_PASSWORD: postgres-dev
+      POSTGRES_USER: postgres-dev
+      POSTGRES_DB: bkmps-dev
 
-    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+  db_test:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/test/data
+    environment:
+      POSTGRES_PASSWORD: postgres-test
+      POSTGRES_USER: postgres-test
+      POSTGRES_DB: bkmps-test
 
 volumes:
   postgres-data:
