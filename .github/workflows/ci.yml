@@ -5,20 +5,11 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [15.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-    - run: npm run test:cov
-    - run: npm run test:e2e
+    - run: docker-compose -f .devcontainer/docker-compose.yml up -d
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm ci"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm run build"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm run test:cov"
+    - run: docker-compose -f .devcontainer/docker-compose.yml exec -T app /bin/sh -c "cd /workspace; npm run test:e2e"
+    - run: docker-compose -f .devcontainer/docker-compose.yml down

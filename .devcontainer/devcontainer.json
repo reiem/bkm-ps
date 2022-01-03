@@ -16,9 +16,9 @@
 			"previewLimit": 50,
 			"server": "localhost",
 			"port": 5432,
-			"database": "bkmps",
-			"username": "postgres",
-			"password": "postgres"
+			"database": "bkmps-dev",
+			"username": "postgres-dev",
+			"password": "postgres-dev"
 		}]
 	},
 

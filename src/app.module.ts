@@ -16,24 +16,24 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         if (configService.get<string>('NODE_ENV') === 'test') {
-          console.log('Using in memory test database...');
           return {
-            type: 'sqlite',
-            database: ':memory:',
-            dropSchema: true,
-            synchronize: true,
+            type: 'postgres',
+            host: 'db_test',
+            port: 5432,
+            username: 'postgres-test',
+            password: 'postgres-test',
+            database: 'bkmps-test',
             entities: [User],
-            logging: false,
+            synchronize: true,
           };
         }
-        console.log('Using postgres database...');
         return {
           type: 'postgres',
-          host: 'localhost',
+          host: 'db_dev',
           port: 5432,
-          username: 'postgres',
-          password: 'postgres',
-          database: 'bkmps',
+          username: 'postgres-dev',
+          password: 'postgres-dev',
+          database: 'bkmps-dev',
           entities: [User],
           synchronize: true,
         };
