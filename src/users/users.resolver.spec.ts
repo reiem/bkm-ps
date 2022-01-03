@@ -11,8 +11,9 @@ describe('UsersResolver', () => {
         UsersResolver,
         {
           provide: UsersService,
-          useValue: {}
-        }],
+          useValue: {},
+        },
+      ],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);

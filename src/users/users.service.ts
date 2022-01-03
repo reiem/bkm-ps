@@ -7,10 +7,12 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
   create(createUserInput: CreateUserInput): Promise<User> {
-    const newUser = this.userRepository.create(createUserInput)
-    return this.userRepository.save(newUser)
+    const newUser = this.userRepository.create(createUserInput);
+    return this.userRepository.save(newUser);
   }
 
   findAll(): Promise<User[]> {
@@ -21,7 +23,7 @@ export class UsersService {
     return this.userRepository.findOneOrFail(id);
   }
 
-  async update(id: number, updateUserInput: UpdateUserInput,): Promise<User> {
+  async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
     const user = await this.userRepository.preload({
       id: id,
       ...updateUserInput,
@@ -33,7 +35,7 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    const entity = await this.userRepository.findOneOrFail(id)
-    return await this.userRepository.softRemove(entity)
+    const entity = await this.userRepository.findOneOrFail(id);
+    return await this.userRepository.softRemove(entity);
   }
 }
