@@ -4,40 +4,23 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { User } from './users/entities/user.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configuration';
+import { validate } from './../env.validation';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+      validate: validate,
+    }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        if (configService.get<string>('NODE_ENV') === 'test') {
-          return {
-            type: 'postgres',
-            host: 'db_test',
-            port: 5432,
-            username: 'postgres-test',
-            password: 'postgres-test',
-            database: 'bkmps-test',
-            entities: [User],
-            synchronize: true,
-          };
-        }
-        return {
-          type: 'postgres',
-          host: 'db_dev',
-          port: 5432,
-          username: 'postgres-dev',
-          password: 'postgres-dev',
-          database: 'bkmps-dev',
-          entities: [User],
-          synchronize: true,
-        };
-      },
+      useFactory: (configService: ConfigService) =>
+        configService.get('database'),
       inject: [ConfigService],
     }),
     UsersModule,
