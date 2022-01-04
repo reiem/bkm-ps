@@ -13,47 +13,50 @@ enum Environment {
   Test = 'test',
 }
 
+const isTest = (envObj: EnvironmentVariables) => envObj.NODE_ENV === 'test';
+const isNotTest = (envObj: EnvironmentVariables) => !isTest(envObj);
+
 class EnvironmentVariables {
   @IsEnum(Environment)
   NODE_ENV: Environment;
 
-  @ValidateIf((o) => o.NODE_ENV !== 'test')
+  @ValidateIf(isNotTest)
   @IsString()
   DB_HOST: string;
 
-  @ValidateIf((o) => o.NODE_ENV !== 'test')
+  @ValidateIf(isNotTest)
   @IsNumberString()
   DB_PORT: string;
 
-  @ValidateIf((o) => o.NODE_ENV !== 'test')
+  @ValidateIf(isNotTest)
   @IsString()
   DB_NAME: string;
 
-  @ValidateIf((o) => o.NODE_ENV !== 'test')
+  @ValidateIf(isNotTest)
   @IsString()
   DB_USER: string;
 
-  @ValidateIf((o) => o.NODE_ENV !== 'test')
+  @ValidateIf(isNotTest)
   @IsString()
   DB_PASSWORD: string;
 
-  @ValidateIf((o) => o.NODE_ENV === 'test')
+  @ValidateIf(isTest)
   @IsString()
   DB_TEST_HOST: string;
 
-  @ValidateIf((o) => o.NODE_ENV === 'test')
+  @ValidateIf(isTest)
   @IsNumberString()
   DB_TEST_PORT: string;
 
-  @ValidateIf((o) => o.NODE_ENV === 'test')
+  @ValidateIf(isTest)
   @IsString()
   DB_TEST_NAME: string;
 
-  @ValidateIf((o) => o.NODE_ENV === 'test')
+  @ValidateIf(isTest)
   @IsString()
   DB_TEST_USER: string;
 
-  @ValidateIf((o) => o.NODE_ENV === 'test')
+  @ValidateIf(isTest)
   @IsString()
   DB_TEST_PASSWORD: string;
 }
