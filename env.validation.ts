@@ -21,6 +21,7 @@ class EnvironmentVariables {
   @IsString()
   DB_HOST: string;
 
+  @ValidateIf((o) => o.NODE_ENV !== 'test')
   @IsNumberString()
   DB_PORT: string;
 
