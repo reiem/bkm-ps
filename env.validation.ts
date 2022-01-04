@@ -11,25 +11,28 @@ enum Environment {
   Development = 'development',
   Production = 'production',
   Test = 'test',
-  Provision = 'provision',
 }
 
 class EnvironmentVariables {
   @IsEnum(Environment)
   NODE_ENV: Environment;
 
+  @ValidateIf((o) => o.NODE_ENV !== 'test')
   @IsString()
   DB_HOST: string;
 
   @IsNumberString()
   DB_PORT: string;
 
+  @ValidateIf((o) => o.NODE_ENV !== 'test')
   @IsString()
   DB_NAME: string;
 
+  @ValidateIf((o) => o.NODE_ENV !== 'test')
   @IsString()
   DB_USER: string;
 
+  @ValidateIf((o) => o.NODE_ENV !== 'test')
   @IsString()
   DB_PASSWORD: string;
 
