@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsString,
   IsNumberString,
+  IsOptional,
   validateSync,
   ValidateIf,
 } from 'class-validator';
@@ -17,6 +18,7 @@ const isTest = (envObj: EnvironmentVariables) => envObj.NODE_ENV === 'test';
 const isNotTest = (envObj: EnvironmentVariables) => !isTest(envObj);
 
 class EnvironmentVariables {
+  @IsOptional()
   @IsEnum(Environment)
   NODE_ENV: Environment;
 

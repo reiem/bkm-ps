@@ -1,8 +1,10 @@
 import { join } from 'path/posix';
 
 export default () => {
-  const isTest = process.env.NODE_ENV === 'test';
-  const isProduction = process.env.NODE_ENV === 'prduction';
+  const envionment = process.env.NODE_ENV ?? 'development';
+  const isTest = envionment === 'test';
+  const isProduction = envionment === 'prduction';
+
   return {
     database: {
       type: 'postgres',
