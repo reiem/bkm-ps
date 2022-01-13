@@ -16,5 +16,11 @@ export default () => {
       synchronize: !isProduction,
       entities: [join(__dirname, '..', '**', 'entities', '*.entity.{ts,js}')],
     },
+    auth: {
+      auth0: {
+        audience: process.env.AUTH0_AUDIENCE,
+        domain: process.env.AUTH0_DOMAIN,
+      },
+    },
   };
 };
