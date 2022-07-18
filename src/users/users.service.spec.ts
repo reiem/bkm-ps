@@ -12,7 +12,15 @@ describe('UsersService', () => {
         UsersService,
         {
           provide: getRepositoryToken(User),
-          useValue: {},
+          useValue: {
+            save: jest.fn((userDto) => {
+              return {
+                id: Date.now(),
+                ...userDto,
+              };
+            }),
+            create: jest.fn((userDto) => userDto),
+          },
         },
       ],
     }).compile();
@@ -22,5 +30,20 @@ describe('UsersService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('create', () => {
+    it('should create a user', async () => {
+      const userDTO = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@gmail.com',
+      }
+      const user = await service.create(userDTO);
+      expect(user).toEqual({
+        id: expect.any(Number),
+        ...userDTO,
+      });
+    });
   });
 });

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserInput } from './dto/create-user.input';
+import { CreateUserInput } from "./dto/CreateUserInput";
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 
@@ -9,7 +9,7 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-  ) {}
+  ) { }
   create(createUserInput: CreateUserInput): Promise<User> {
     const newUser = this.userRepository.create(createUserInput);
     return this.userRepository.save(newUser);
@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   findOne(id: number): Promise<User> {
-    return this.userRepository.findOneOrFail(id);
+    return this.userRepository.findOneOrFail({ where: { id } });
   }
 
   async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
@@ -35,7 +35,7 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    const entity = await this.userRepository.findOneOrFail(id);
+    const entity = await this.userRepository.findOneOrFail({ where: { id } });
     return await this.userRepository.softRemove(entity);
   }
 }
