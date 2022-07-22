@@ -1,29 +1,6 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-
-@Entity()
-@ObjectType()
-export class BaseEntity {
-  @PrimaryGeneratedColumn()
-  @Field(() => Int)
-  id: number;
-
-  @CreateDateColumn()
-  createdDate: Date;
-
-  @UpdateDateColumn()
-  updatedDate: Date;
-
-  @DeleteDateColumn()
-  deletedDate: Date;
-}
+import { ObjectType, Field } from '@nestjs/graphql';
+import { BaseEntity } from '../../common/base.entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 @ObjectType()

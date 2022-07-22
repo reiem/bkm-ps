@@ -20,6 +20,14 @@ describe('UsersService', () => {
               };
             }),
             create: jest.fn((userDto) => userDto),
+            find: jest.fn(() => [
+              {
+                id: Date.now(),
+                email: 'john.doe@gmail.com',
+                firstName: 'John',
+                lastName: 'Doe',
+              },
+            ]),
           },
         },
       ],
@@ -38,12 +46,26 @@ describe('UsersService', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@gmail.com',
-      }
+      };
       const user = await service.create(userDTO);
       expect(user).toEqual({
         id: expect.any(Number),
         ...userDTO,
       });
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all users', async () => {
+      const users = await service.findAll();
+      expect(users).toEqual([
+        {
+          id: expect.any(Number),
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@gmail.com',
+        },
+      ]);
     });
   });
 });
