@@ -1,10 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { userStub } from './stubs/user.stub';
 import { UsersService } from './users.service';
+import { UserRepository } from './__mocks__/users.repository';
 
 describe('UsersService', () => {
   let service: UsersService;
+  let repository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -12,28 +16,13 @@ describe('UsersService', () => {
         UsersService,
         {
           provide: getRepositoryToken(User),
-          useValue: {
-            save: jest.fn((userDto) => {
-              return {
-                id: Date.now(),
-                ...userDto,
-              };
-            }),
-            create: jest.fn((userDto) => userDto),
-            find: jest.fn(() => [
-              {
-                id: Date.now(),
-                email: 'john.doe@gmail.com',
-                firstName: 'John',
-                lastName: 'Doe',
-              },
-            ]),
-          },
+          useFactory: UserRepository,
         },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+    repository = module.get(getRepositoryToken(User));
   });
 
   it('should be defined', () => {
@@ -41,31 +30,63 @@ describe('UsersService', () => {
   });
 
   describe('create', () => {
-    it('should create a user', async () => {
-      const userDTO = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@gmail.com',
+    describe('when create is called', () => {
+      let user: User;
+      const dto = {
+        firstName: userStub().firstName,
+        lastName: userStub().lastName,
+        email: userStub().email,
       };
-      const user = await service.create(userDTO);
-      expect(user).toEqual({
-        id: expect.any(Number),
-        ...userDTO,
+
+      beforeEach(async () => {
+        user = await service.create(dto);
+      });
+
+      test('it should call save on the repository', () => {
+        expect(repository.save).toHaveBeenCalled();
+      });
+
+      test('it should return the user', () => {
+        expect(user).toEqual(userStub());
       });
     });
   });
 
   describe('findAll', () => {
-    it('should return all users', async () => {
-      const users = await service.findAll();
-      expect(users).toEqual([
-        {
-          id: expect.any(Number),
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@gmail.com',
-        },
-      ]);
+    describe('when findAll is called', () => {
+      let users: User[];
+
+      beforeEach(async () => {
+        users = await service.findAll();
+      });
+
+      test('it should call find on the repository', () => {
+        expect(repository.find).toHaveBeenCalled();
+      });
+
+      test('it should return the users', () => {
+        expect(users).toEqual([userStub()]);
+      });
+    });
+  });
+
+  describe('findOne', () => {
+    describe('when findOne is called', () => {
+      let user: User;
+
+      beforeEach(async () => {
+        user = await service.findOne(userStub().id);
+      });
+
+      test('it should call findOneOrFail on the repository', () => {
+        expect(repository.findOneOrFail).toHaveBeenCalledWith({
+          where: { id: userStub().id },
+        });
+      });
+
+      test('it should return the user', () => {
+        expect(user).toEqual(userStub());
+      });
     });
   });
 });
