@@ -89,4 +89,53 @@ describe('UsersService', () => {
       });
     });
   });
+
+  describe('update', () => {
+    describe('when update is called', () => {
+      let user: User;
+      const dto = {
+        id: userStub().id,
+        firstName: userStub().firstName,
+        lastName: userStub().lastName,
+        email: userStub().email,
+      };
+
+      beforeEach(async () => {
+        user = await service.update(userStub().id, dto);
+      });
+
+      test('it should call preload on the repository', () => {
+        expect(repository.preload).toHaveBeenCalledWith({
+          id: userStub().id,
+          ...dto,
+        });
+      });
+
+      test('it should call save on the repository', () => {
+        expect(repository.save).toHaveBeenCalled();
+      });
+
+      test('it should return the user', () => {
+        expect(user).toEqual(userStub());
+      });
+    });
+  });
+
+  describe('remove', () => {
+    describe('when remove is called', () => {
+      let user: User;
+
+      beforeEach(async () => {
+        user = await service.remove(userStub().id);
+      });
+
+      test('it should call softRemove on the repository', () => {
+        expect(repository.softRemove).toHaveBeenCalledWith(userStub());
+      });
+
+      test('it should return the user', () => {
+        expect(user).toEqual(userStub());
+      });
+    });
+  });
 });

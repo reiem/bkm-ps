@@ -5,4 +5,6 @@ export const UserRepository = jest.fn().mockReturnValue({
   create: jest.fn(),
   find: jest.fn().mockResolvedValue([userStub()]),
   findOneOrFail: jest.fn().mockResolvedValue(userStub()),
+  preload: jest.fn().mockResolvedValue(userStub()),
+  softRemove: jest.fn().mockResolvedValue(userStub()),
 });
