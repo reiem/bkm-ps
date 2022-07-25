@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
 import { validate } from './../env.validation';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import { ApolloDriver } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { validate } from './../env.validation';
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
+      driver: ApolloDriver,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -26,4 +29,4 @@ import { validate } from './../env.validation';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
